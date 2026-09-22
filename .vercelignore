@@ -1,0 +1,8 @@
+# Ignore backend from Vercel frontend build
+backend/
+*.py
+requirements.txt
+Dockerfile
+render.yaml
+*.bat
+*.ps1
