@@ -99,7 +99,41 @@ BankIT360/
 
 ---
 
+## ☁️ Cloud Deployment Architecture
+
+BankIT360 is architected for dual-cloud deployment:
+
+```mermaid
+graph TD
+    User["Bank Branches & Admins"] --> Vercel["Vercel Frontend (React SPA)"]
+    Vercel -->|/api/* edge proxy| Render["Render Backend (FastAPI Web Service)"]
+    Render --> DB[(Relational DB / SQLAlchemy)]
+```
+
+### 1. Deploy Frontend to Vercel
+The repository includes a ready-to-use [`vercel.json`](./vercel.json) with Vite presets and edge reverse proxying:
+1. Go to **[Vercel Dashboard](https://vercel.com/new)**.
+2. Select and import **`singhalriya164-commits/BankIT360`**.
+3. Framework Preset: **Vite** (auto-detected).
+4. Output Directory: **`dist`** (auto-detected).
+5. Click **Deploy**. Vercel will build the frontend and route `/api/*` requests to the Render backend service.
+
+### 2. Deploy Backend to Render
+The repository includes an Infrastructure-as-Code Blueprint [`render.yaml`](./render.yaml) and [`backend/Dockerfile`](./backend/Dockerfile):
+1. Go to **[Render: New Blueprint Instance](https://dashboard.render.com/select-repo?type=blueprint)**.
+2. Select your repository: **`singhalriya164-commits/BankIT360`**.
+3. Render will detect `render.yaml` and configure:
+   - **Service Name**: `bankit360-backend`
+   - **Runtime**: Python 3.11
+   - **Build Command**: `pip install -r backend/requirements.txt`
+   - **Start Command**: `python -m uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT`
+   - **Health Check**: `/`
+4. Click **Apply** to deploy the live backend web service.
+
+---
+
 ## 📄 Documentation Artifacts
 
-- 📋 **Technical Proposal & Implementation Plan:** `file:///C:/Users/Chaha/.gemini/antigravity-ide/brain/ae222f5a-edb0-49a7-9f14-23ae844823f6/implementation_plan.md`
-- 📑 **Walkthrough & Project Deliverables Summary:** `file:///C:/Users/Chaha/.gemini/antigravity-ide/brain/ae222f5a-edb0-49a7-9f14-23ae844823f6/walkthrough.md`
+- 📋 **Technical Proposal & Implementation Plan:** [implementation_plan.md](https://github.com/singhalriya164-commits/BankIT360)
+- 📑 **Walkthrough & Project Deliverables Summary:** [walkthrough.md](https://github.com/singhalriya164-commits/BankIT360)
+
